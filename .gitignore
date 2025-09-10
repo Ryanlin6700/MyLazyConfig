@@ -1,0 +1,21 @@
+# Ignore plugin data, caches and runtime state
+/local/
+/cache/
+/state/
+/sessions/
+/swap/
+/undo/
+/view/
+/shada/
+
+# Ignore logs
+*.log
+
+# Ignore plugin manager generated files (but keep lock file)
+lazy/
+!lazy-lock.json
+
+# Ignore possible temp files
+*.tmp
+*.bak
+*~
