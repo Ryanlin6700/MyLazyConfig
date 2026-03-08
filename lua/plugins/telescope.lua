@@ -1,30 +1,18 @@
-local focus_preview = function(prompt_bufnr)
-  local action_state = require("telescope.actions.state")
-  local actions = require("telescope.actions")
-  local picker = action_state.get_current_picker(prompt_bufnr)
-  local prompt_win = picker.prompt_win
-  local previewer = picker.previewer
-  local winid = previewer.state.winid
-  local bufnr = previewer.state.bufnr
-  vim.keymap.set("n", "<Tab>", function()
-    vim.cmd(string.format("noautocmd lua vim.api.nvim_set_current_win(%s)", prompt_win))
-  end, { buffer = bufnr })
-  vim.keymap.set("n", "q", function()
-    actions.close(prompt_bufnr)
-  end, { buffer = bufnr })
-  vim.cmd(string.format("noautocmd lua vim.api.nvim_set_current_win(%s)", winid))
-  -- api.nvim_set_current_win(winid)
-end
-local telescope = {
-  "nvim-telescope/telescope.nvim",
-  opts = function(_, opts)
-    opts.defaults = vim.tbl_extend("force", opts.defaults or {}, {
-      mappings = {
-        n = {
-          ["<leader>m"] = focus_preview,
+return {
+  {
+    "nvim-telescope/telescope.nvim",
+    opts = function(_, opts)
+      opts.defaults = opts.defaults or {}
+      opts.defaults.layout_strategy = "horizontal"
+      opts.defaults.layout_config = {
+        width = 0.95,
+        height = 0.85,
+        preview_cutoff = 1, -- ⭐ 強制永遠顯示 preview
+        horizontal = {
+          preview_width = 0.8,
+          results_width = 0.2,
         },
-      },
-    })
-  end,
+      }
+    end,
+  },
 }
-return telescope
