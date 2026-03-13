@@ -10,6 +10,7 @@
 
 # Ignore logs
 *.log
+.nvimlog
 
 # Ignore plugin manager generated files (but keep lock file)
 lazy/

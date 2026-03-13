@@ -24,9 +24,33 @@ return {
       {
         "<leader>gv",
         function()
-          require("gitgraph").draw({}, { all = true, max_count = 5000 })
+          local Snacks = require("snacks")
+
+          Snacks.win({
+            position = "float",
+            width = 0.6,
+            height = 0.95,
+            border = "rounded",
+            title = "Git Graph",
+            title_pos = "center",
+            enter = true,
+            fixbuf = false,
+            on_win = function(win)
+              vim.api.nvim_win_call(win.win, function()
+                require("gitgraph").draw({}, { all = true, max_count = 5000 })
+              end)
+
+              local buf = vim.api.nvim_win_get_buf(win.win)
+              local close = function()
+                win:close()
+              end
+
+              vim.keymap.set("n", "q", close, { buffer = buf, silent = true, desc = "Close Git Graph" })
+              vim.keymap.set("n", "<Esc>", close, { buffer = buf, silent = true, desc = "Close Git Graph" })
+            end,
+          })
         end,
-        desc = "GitGraph - Draw",
+        desc = "GitGraph Popup",
       },
     },
   },

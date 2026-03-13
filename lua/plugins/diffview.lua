@@ -18,6 +18,19 @@ return {
       { "<leader>gc", "<cmd>DiffviewClose<cr>", desc = "Diffview: Close" },
     },
     config = function()
+      local function apply_diffview_highlights()
+        local highlights = {
+          DiffviewDiffDeleteDim = { fg = "#7a3b44", bg = "#4a1f24" },
+          DiffviewDiffDelete = { fg = "#7a3b44", bg = "#4a1f24" },
+          DiffviewDiffAddAsDelete = { fg = "#7a3b44", bg = "#4a1f24" },
+          DiffviewDiffText = { fg = "#f2d5d8", bg = "#6b2730", bold = true },
+        }
+
+        for group, opts in pairs(highlights) do
+          vim.api.nvim_set_hl(0, group, opts)
+        end
+      end
+
       local diffview = require("diffview")
       local actions = require("diffview.actions")
 
@@ -55,6 +68,14 @@ return {
           end,
         },
       })
+
+      local augroup = vim.api.nvim_create_augroup("user_diffview_highlights", { clear = true })
+      vim.api.nvim_create_autocmd("ColorScheme", {
+        group = augroup,
+        callback = apply_diffview_highlights,
+      })
+
+      apply_diffview_highlights()
     end,
   },
 }
