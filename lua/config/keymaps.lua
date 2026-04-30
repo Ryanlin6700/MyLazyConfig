@@ -29,6 +29,25 @@ vim.keymap.set("n", "<leader>h", ":noh<CR>")
 vim.api.nvim_set_keymap("i", "jj", "<ESC>", { noremap = false })
 vim.api.nvim_set_keymap("i", "jk", "<ESC>", { noremap = false })
 
+-- vim.api.nvim_create_autocmd("FileType", {
+--   pattern = "snacks_picker_input",
+--   callback = function(args)
+--     -- Avoid global `jj`/`jk` insert mappings delaying Snacks picker navigation.
+--     vim.keymap.set({ "i", "n" }, "j", "<Down>", {
+--       buffer = args.buf,
+--       remap = true,
+--       silent = true,
+--       nowait = true,
+--     })
+--     vim.keymap.set({ "i", "n" }, "k", "<Up>", {
+--       buffer = args.buf,
+--       remap = true,
+--       silent = true,
+--       nowait = true,
+--     })
+--   end,
+-- })
+
 -- 關閉所有 LSP 的 inlay hints（LazyVim 預設有啟用）
 vim.api.nvim_create_autocmd("LspAttach", {
   callback = function(args)
