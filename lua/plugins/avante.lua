@@ -23,11 +23,11 @@ return {
       auto_approve_tool_permissions = false,
     },
 
-    -- auto_suggestions_provider = "copilot",
+    auto_suggestions_provider = "copilot",
     providers = {
       openai = {
         endpoint = "https://api.githubcopilot.com",
-        model = "gpt-5.1",
+        model = "gpt-5.3",
         timeout = 30000,
         extra_request_body = {
           temperature = 0,

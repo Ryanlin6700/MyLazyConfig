@@ -6,6 +6,29 @@
 vim.g.mapleader = " "
 vim.g.markdown_syntax_conceal = 1
 
+-- Make external picker tools available even when Neovim is launched from a GUI
+-- or another environment with a minimal PATH.
+do
+  local path_sep = package.config:sub(1, 1) == "\\" and ";" or ":"
+  local paths = {
+    vim.fn.stdpath("config") .. "/bin",
+    vim.fn.expand("~/.local/bin"),
+    vim.fn.expand("~/.cargo/bin"),
+    vim.fn.expand("~/go/bin"),
+    "/opt/homebrew/bin",
+    "/home/linuxbrew/.linuxbrew/bin",
+  }
+  local current = path_sep .. (vim.env.PATH or "") .. path_sep
+
+  for i = #paths, 1, -1 do
+    local dir = paths[i]
+    if vim.fn.isdirectory(dir) == 1 and not current:find(path_sep .. vim.pesc(dir) .. path_sep) then
+      vim.env.PATH = dir .. path_sep .. (vim.env.PATH or "")
+      current = path_sep .. vim.env.PATH .. path_sep
+    end
+  end
+end
+
 vim.api.nvim_set_hl(0, "swagger_tag", { fg = "#FFD700", bold = true })
 
 -- Apply early so native gc/gcc uses this behavior from startup.
