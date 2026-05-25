@@ -6,6 +6,94 @@
 vim.g.mapleader = " "
 vim.g.markdown_syntax_conceal = 1
 
+local function wsl_clipboard_without_exe()
+  local osc52 = require("vim.ui.clipboard.osc52")
+  local cache = {
+    ["+"] = { {}, "v" },
+    ["*"] = { {}, "v" },
+  }
+  local copied_at = {
+    ["+"] = 0,
+    ["*"] = 0,
+  }
+
+  local function xclip_selection(reg)
+    return reg == "+" and "clipboard" or "primary"
+  end
+
+  local function copy(reg)
+    local osc52_copy = osc52.copy(reg)
+
+    return function(lines, regtype)
+      cache[reg] = { lines, regtype }
+      copied_at[reg] = vim.uv.hrtime()
+      osc52_copy(lines)
+
+      if vim.fn.executable("xclip") == 1 and vim.env.DISPLAY then
+        local job = vim.fn.jobstart({ "xclip", "-quiet", "-i", "-selection", xclip_selection(reg) }, {
+          cwd = "/",
+          detach = true,
+        })
+
+        if job > 0 then
+          vim.fn.jobsend(job, lines)
+          vim.fn.jobclose(job, "stdin")
+          vim.fn.jobclose(job, "stdout")
+        end
+      end
+    end
+  end
+
+  local function paste(reg)
+    return function()
+      if vim.uv.hrtime() - copied_at[reg] < 2 * 1000 * 1000 * 1000 then
+        return cache[reg]
+      end
+
+      if vim.fn.executable("xclip") == 1 and vim.env.DISPLAY then
+        local lines = vim.fn.systemlist({ "xclip", "-o", "-selection", xclip_selection(reg) }, "", 1)
+
+        if vim.v.shell_error == 0 then
+          if vim.deep_equal(lines, cache[reg][1]) then
+            return cache[reg]
+          end
+
+          return { lines, "v" }
+        end
+      end
+
+      return cache[reg]
+    end
+  end
+
+  vim.g.clipboard = {
+    name = "WindowsTerminalOSC52",
+    copy = {
+      ["+"] = copy("+"),
+      ["*"] = copy("*"),
+    },
+    paste = {
+      ["+"] = paste("+"),
+      ["*"] = paste("*"),
+    },
+    cache_enabled = 0,
+  }
+end
+
+-- In Windows Terminal, xclip can stay local to WSLg and not update the Windows
+-- clipboard. OSC52 writes directly to the terminal clipboard without .exe.
+if vim.fn.has("wsl") == 1 and vim.env.WT_SESSION then
+  wsl_clipboard_without_exe()
+elseif vim.fn.executable("wl-copy") == 1 and vim.fn.executable("wl-paste") == 1 and vim.env.WAYLAND_DISPLAY then
+  vim.g.clipboard = "wl-copy"
+elseif vim.fn.executable("xclip") == 1 and vim.env.DISPLAY then
+  vim.g.clipboard = "xclip"
+elseif vim.fn.has("wsl") == 1 then
+  vim.g.clipboard = "osc52"
+end
+
+vim.opt.clipboard:append("unnamedplus")
+
 -- Make external picker tools available even when Neovim is launched from a GUI
 -- or another environment with a minimal PATH.
 do
