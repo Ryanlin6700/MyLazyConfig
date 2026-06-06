@@ -3,8 +3,8 @@
 -- Add any additional keymaps here
 --
 --
--- Normal 模式 Ctrl-/ => 等同 gc
-vim.keymap.set("n", "<leader>/", "Vgc", { remap = true, silent = true })
+-- Normal 模式 <leader>/ => 註解目前行
+vim.keymap.set("n", "<leader>/", "gcc", { desc = "Toggle Comment", remap = true, silent = true })
 -- vim.keymap.set("n", "<leader>/", function()
 --   local line = vim.api.nvim_get_current_line()
 --
@@ -17,8 +17,8 @@ vim.keymap.set("n", "<leader>/", "Vgc", { remap = true, silent = true })
 --   vim.api.nvim_feedkeys("Vgc", "n", false)
 -- end, { silent = true })
 
--- Visual 模式 Ctrl-/ => 等同 gc 選取
-vim.keymap.set("x", "<leader>/", "gc", { remap = true, silent = true })
+-- Visual 模式 <leader>/ => 註解選取範圍
+vim.keymap.set("x", "<leader>/", "gc", { desc = "Toggle Comment", remap = true, silent = true })
 
 vim.keymap.set("t", "<C-n>", [[<C-\><C-n>]], { noremap = true, silent = true })
 

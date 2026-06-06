@@ -100,6 +100,9 @@ do
   local path_sep = package.config:sub(1, 1) == "\\" and ";" or ":"
   local paths = {
     vim.fn.stdpath("config") .. "/bin",
+    "/usr/local/bin",
+    "/usr/bin",
+    "/bin",
     vim.fn.expand("~/.local/bin"),
     vim.fn.expand("~/.cargo/bin"),
     vim.fn.expand("~/go/bin"),
