@@ -243,7 +243,7 @@ return {
       vim.api.nvim_create_autocmd("FileType", {
         pattern = "dbui",
         callback = function(event)
-          vim.keymap.set("n", "o", open_dadbod_item_in_right_split, {
+          vim.keymap.set("n", "l", open_dadbod_item_in_right_split, {
             buffer = event.buf,
             desc = "Open dadbod item in split",
             nowait = true,
