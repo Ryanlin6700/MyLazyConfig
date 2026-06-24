@@ -10,11 +10,23 @@ return {
   {
     "LazyVim/LazyVim",
     init = function()
+      vim.g.omni_sql_no_default_maps = 1
+
       vim.api.nvim_create_autocmd("FileType", {
         pattern = sql_ft,
         callback = function(args)
           vim.b[args.buf].autoformat = false
           vim.bo[args.buf].commentstring = "-- %s"
+          vim.keymap.set("i", "<C-x><C-o>", "<Nop>", {
+            buffer = args.buf,
+            desc = "Disable SQL omni completion",
+          })
+
+          vim.schedule(function()
+            if vim.api.nvim_buf_is_valid(args.buf) then
+              vim.bo[args.buf].omnifunc = ""
+            end
+          end)
         end,
       })
     end,
