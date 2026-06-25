@@ -27,7 +27,7 @@ return {
     providers = {
       openai = {
         endpoint = "https://api.githubcopilot.com",
-        model = "gpt-5.3",
+        model = "gpt-5.5",
         timeout = 30000,
         extra_request_body = {
           temperature = 0,

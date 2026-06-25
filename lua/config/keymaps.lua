@@ -3,8 +3,8 @@
 -- Add any additional keymaps here
 --
 --
--- Normal 模式 Ctrl-/ => 等同 gc
-vim.keymap.set("n", "<leader>/", "Vgc", { remap = true, silent = true })
+-- Normal 模式 <leader>/ => 註解目前行
+vim.keymap.set("n", "<leader>/", "gcc", { desc = "Toggle Comment", remap = true, silent = true })
 -- vim.keymap.set("n", "<leader>/", function()
 --   local line = vim.api.nvim_get_current_line()
 --
@@ -17,8 +17,8 @@ vim.keymap.set("n", "<leader>/", "Vgc", { remap = true, silent = true })
 --   vim.api.nvim_feedkeys("Vgc", "n", false)
 -- end, { silent = true })
 
--- Visual 模式 Ctrl-/ => 等同 gc 選取
-vim.keymap.set("x", "<leader>/", "gc", { remap = true, silent = true })
+-- Visual 模式 <leader>/ => 註解選取範圍
+vim.keymap.set("x", "<leader>/", "gc", { desc = "Toggle Comment", remap = true, silent = true })
 
 vim.keymap.set("t", "<C-n>", [[<C-\><C-n>]], { noremap = true, silent = true })
 
@@ -63,3 +63,20 @@ vim.keymap.set("n", "<leader>tn", "<cmd>tabnew<CR>", { desc = "New Tab" })
 vim.keymap.set("n", "<leader>ts", "<cmd>tab split<CR>", { desc = "Tab Split" })
 vim.keymap.set("n", "<leader>tc", "<cmd>tabclose<CR>", { desc = "Close Tab" })
 vim.keymap.set("n", "<leader>to", "<cmd>tabonly<CR>", { desc = "Tab Only" })
+
+-- 交換 dadbod <-> debug keymaps
+local function delete_keymap(mode, lhs)
+  pcall(vim.keymap.del, mode, lhs)
+end
+
+delete_keymap("n", "<leader>dpp")
+delete_keymap("n", "<leader>dph")
+delete_keymap("n", "<leader>dps")
+
+if _G.Snacks then
+  Snacks.toggle.profiler():map("<leader>Dpp")
+  Snacks.toggle.profiler_highlights():map("<leader>Dph")
+  vim.keymap.set("n", "<leader>Dps", function()
+    Snacks.profiler.scratch()
+  end, { desc = "Profiler Scratch Buffer" })
+end
