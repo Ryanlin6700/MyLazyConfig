@@ -63,3 +63,20 @@ vim.keymap.set("n", "<leader>tn", "<cmd>tabnew<CR>", { desc = "New Tab" })
 vim.keymap.set("n", "<leader>ts", "<cmd>tab split<CR>", { desc = "Tab Split" })
 vim.keymap.set("n", "<leader>tc", "<cmd>tabclose<CR>", { desc = "Close Tab" })
 vim.keymap.set("n", "<leader>to", "<cmd>tabonly<CR>", { desc = "Tab Only" })
+
+-- 交換 dadbod <-> debug keymaps
+local function delete_keymap(mode, lhs)
+  pcall(vim.keymap.del, mode, lhs)
+end
+
+delete_keymap("n", "<leader>dpp")
+delete_keymap("n", "<leader>dph")
+delete_keymap("n", "<leader>dps")
+
+if _G.Snacks then
+  Snacks.toggle.profiler():map("<leader>Dpp")
+  Snacks.toggle.profiler_highlights():map("<leader>Dph")
+  vim.keymap.set("n", "<leader>Dps", function()
+    Snacks.profiler.scratch()
+  end, { desc = "Profiler Scratch Buffer" })
+end

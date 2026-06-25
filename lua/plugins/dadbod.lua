@@ -196,11 +196,11 @@ return {
       "DBUIListConnections",
     },
     keys = {
-      { "<leader>Du", "<cmd>DBUIToggle<cr>", desc = "Database UI" },
-      { "<leader>Da", "<cmd>DBUIAddConnection<cr>", desc = "Database Add Connection" },
-      { "<leader>Df", "<cmd>DBUIFindBuffer<cr>", desc = "Database Find Buffer" },
-      { "<leader>Dr", "<cmd>DBUIRenameBuffer<cr>", desc = "Database Rename Buffer" },
-      { "<leader>Dl", "<cmd>DBUIListConnections<cr>", desc = "Database List DSNs" },
+      { "<leader>du", "<cmd>DBUIToggle<cr>", desc = "Database UI" },
+      { "<leader>da", "<cmd>DBUIAddConnection<cr>", desc = "Database Add Connection" },
+      { "<leader>df", "<cmd>DBUIFindBuffer<cr>", desc = "Database Find Buffer" },
+      { "<leader>dr", "<cmd>DBUIRenameBuffer<cr>", desc = "Database Rename Buffer" },
+      { "<leader>dl", "<cmd>DBUIListConnections<cr>", desc = "Database List DSNs" },
     },
     init = function()
       vim.g.db_ui_use_nerd_fonts = 1
@@ -260,11 +260,11 @@ return {
       vim.api.nvim_create_autocmd("FileType", {
         pattern = { "sql", "mysql", "plsql" },
         callback = function()
-          vim.keymap.set("n", "<leader>Ds", "<Plug>(DBUI_SaveQuery)", {
+          vim.keymap.set("n", "<leader>ds", "<Plug>(DBUI_SaveQuery)", {
             buffer = true,
             desc = "Database Save Query",
           })
-          vim.keymap.set({ "n", "v" }, "<leader>Dx", "<Plug>(DBUI_ExecuteQuery)", {
+          vim.keymap.set({ "n", "v" }, "<leader>dx", "<Plug>(DBUI_ExecuteQuery)", {
             buffer = true,
             desc = "Database Execute Query",
           })
