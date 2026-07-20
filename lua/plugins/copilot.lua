@@ -1,35 +1,28 @@
 return {
   {
     "zbirenbaum/copilot.lua",
-    event = "VeryLazy",
-    config = function()
-      require("copilot").setup({
-        suggestion = {
-          enabled = true,
-          auto_trigger = true,
-          accept = false,
-        },
-        panel = {
-          enabled = false,
-        },
-        filetypes = {
-          markdown = true,
-          help = true,
-          html = true,
-          javascript = true,
-          typescript = true,
-          ["*"] = true,
+    opts = function(_, opts)
+      opts.suggestion = vim.tbl_deep_extend("force", opts.suggestion or {}, {
+        enabled = true,
+        auto_trigger = true,
+        hide_during_completion = false,
+        keymap = {
+          accept = "<Tab>",
+          next = "<M-]>",
+          prev = "<M-[>",
+          dismiss = "<C-]>",
         },
       })
-
-      vim.keymap.set("i", "<Tab>", function()
-        if require("copilot.suggestion").is_visible() then
-          require("copilot.suggestion").accept()
-        else
-          vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes("<Tab>", true, false, true), "n", false)
-        end
-      end, {
-        silent = true,
+      opts.panel = vim.tbl_deep_extend("force", opts.panel or {}, {
+        enabled = false,
+      })
+      opts.filetypes = vim.tbl_deep_extend("force", opts.filetypes or {}, {
+        markdown = true,
+        help = true,
+        html = true,
+        javascript = true,
+        typescript = true,
+        ["*"] = true,
       })
     end,
   },

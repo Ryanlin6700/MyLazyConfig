@@ -6,6 +6,9 @@
 vim.g.mapleader = " "
 vim.g.markdown_syntax_conceal = 1
 
+-- Use Copilot's native inline suggestions instead of routing them through blink.cmp.
+vim.g.ai_cmp = false
+
 local function wsl_clipboard_without_exe()
   local osc52 = require("vim.ui.clipboard.osc52")
   local cache = {

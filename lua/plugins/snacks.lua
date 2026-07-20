@@ -29,6 +29,29 @@ local function grep_layout()
   }
 end
 
+local function find_all_files()
+  local cwd = LazyVim.root()
+
+  Snacks.picker.pick({
+    title = "Find All Files (Root Dir)",
+    cwd = cwd,
+    finder = function(opts, ctx)
+      return require("snacks.picker.source.proc").proc({
+        cmd = "rg",
+        args = { "--files", "--hidden", "--no-ignore", "--no-messages", "--color", "never" },
+        cwd = cwd,
+        transform = function(item)
+          item.cwd = cwd
+          item.file = item.text
+        end,
+      }, ctx)
+    end,
+    format = "file",
+    preview = "file",
+    show_empty = true,
+  })
+end
+
 return {
   "folke/snacks.nvim",
   priority = 1000,
@@ -225,6 +248,11 @@ return {
         Snacks.picker.files()
       end,
       desc = "Find Files",
+    },
+    {
+      "<leader>fa",
+      find_all_files,
+      desc = "Find All Files (Root Dir)",
     },
     {
       "<leader>fg",
