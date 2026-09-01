@@ -5,6 +5,7 @@
 --
 vim.g.mapleader = " "
 vim.g.markdown_syntax_conceal = 1
+vim.opt.timeoutlen = 500
 
 -- Use Copilot's native inline suggestions instead of routing them through blink.cmp.
 vim.g.ai_cmp = false
