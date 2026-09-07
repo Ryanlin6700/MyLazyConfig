@@ -203,10 +203,23 @@ return {
       { "<leader>dl", "<cmd>DBUIListConnections<cr>", desc = "Database List DSNs" },
     },
     init = function()
+      -- Ensure lazy-loaded Dadbod can find the user-installed DuckDB CLI.
+      vim.env.PATH = vim.fn.expand("~/.duckdb/cli/latest") .. ":" .. vim.env.PATH
+
       vim.g.db_ui_use_nerd_fonts = 1
       vim.g.db_ui_show_database_icon = 1
       vim.g.db_ui_force_echo_notifications = 1
       vim.g.db_ui_win_position = "right"
+
+      -- SQLite's column output defaults to a width of 10 characters, which
+      -- truncates longer names in the `Columns` table helper.  `.width` is a
+      -- sqlite3 shell command, so it is applied before the helper's SELECT.
+      local sqlite_columns_query = [[.width 6 24 16 10 24 6
+SELECT * FROM pragma_table_info('{table}')]]
+      vim.g.db_ui_table_helpers = vim.tbl_deep_extend("force", vim.g.db_ui_table_helpers or {}, {
+        sqlite = { Columns = sqlite_columns_query },
+        sqlite3 = { Columns = sqlite_columns_query },
+      })
 
       local dadbod_ui_path = vim.fn.stdpath("data") .. "/dadbod-ui"
       vim.g.db_ui_save_location = dadbod_ui_path
